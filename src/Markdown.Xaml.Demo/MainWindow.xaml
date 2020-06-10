@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Markdown.Demo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Markdown.Xaml;assembly=Markdown.Xaml"
+        xmlns:local="clr-namespace:Markdown.Xaml;assembly=MarkdownFlowDocument"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:demo="clr-namespace:Markdown.Demo"
         Title="Markdown.Xaml Demo"
@@ -34,7 +34,7 @@
                         AssetPathRoot="{x:Static system:Environment.CurrentDirectory}"/>
 
         <local:TextToFlowDocumentConverter x:Key="TextToFlowDocumentConverter" 
-                                           Markdown="{StaticResource Markdown}"/>
+                                          Markdown="{StaticResource Markdown}"/>
 
         <demo:BoolToEnabledConverter x:Key="BoolToEnabledConverter"/>
 

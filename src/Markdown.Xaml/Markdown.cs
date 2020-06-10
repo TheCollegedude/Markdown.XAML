@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Cache;
 using System.Text;
@@ -14,6 +17,8 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Brushes = System.Windows.Media.Brushes;
+using Image = System.Windows.Controls.Image;
 
 namespace Markdown.Xaml
 {
@@ -588,15 +593,32 @@ namespace Markdown.Xaml
         /// <param name="url">Url of the image to load.</param>
         private BitmapImage CreateBitmapImage(string url = null)
         {
-            BitmapImage imgSource = new BitmapImage();
+            if (string.IsNullOrEmpty(url))
+            {
+                using (var stream = new MemoryStream()) {
+                    Properties.Resources.ImageFailed.Save(stream, ImageFormat.Bmp);
+
+                    stream.Position = 0;
+                    var result = new BitmapImage();
+                    result.BeginInit();
+                    // According to MSDN, "The default OnDemand cache option retains access to the stream until the image is needed."
+                    // Force the bitmap to load right now so we can dispose the stream.
+                    result.CacheOption = BitmapCacheOption.OnLoad;
+                    result.StreamSource = stream;
+                    result.EndInit();
+                    result.Freeze();
+                    return result;
+                }
+            }
+
+            var imgSource = new BitmapImage();
             imgSource.BeginInit();
             imgSource.CacheOption = BitmapCacheOption.None;
             imgSource.UriCachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
             imgSource.CacheOption = BitmapCacheOption.OnLoad;
             imgSource.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-            imgSource.UriSource = !string.IsNullOrEmpty(url) ? new Uri(url)
-                                                             : new Uri(System.IO.Path.Combine(AssetPathRoot ?? string.Empty, "imgfailed.png"));
-            imgSource.EndInit();
+            imgSource.UriSource = new Uri(url);
+            imgSource.EndInit();     // System.IO.FileNotFoundException:
             return imgSource;
         }
 
