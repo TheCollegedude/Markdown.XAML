@@ -351,5 +351,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/nuget_pack.cmd
-/nuget_deploy.cmd
+/apikey.cmd
