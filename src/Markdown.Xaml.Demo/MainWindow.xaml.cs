@@ -27,7 +27,7 @@ namespace Markdown.Demo
         {
             InitializeComponent();
 
-            CommandBindings.Add(new CommandBinding(NavigationCommands.GoToPage, (sender, e) => Process.Start((string)e.Parameter)));
+            CommandBindings.Add(new CommandBinding(NavigationCommands.GoToPage, (sender, e) => Console.WriteLine((string)e.Parameter)));
 
             this.DataContext = new DemoViewModel();
         }

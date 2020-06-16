@@ -648,21 +648,25 @@ namespace Markdown.Xaml
 
         private static readonly Regex _anchorInline = new Regex(
             string.Format(CultureInfo.InvariantCulture, @"
-                (                           # wrap whole match in $1
+                (                           # wrap whole match
                     \[
-                        ({0})               # link text = $2
+                        (?<text>{0})            # link text
                     \]
-                    \(                      # literal paren
-                        [ ]*
-                        ({1})               # href = $3
-                        [ ]*
-                        (                   # $4
-                        (['""])             # quote char = $5
-                        (.*?)               # title = $6
-                        \5                  # matching quote
-                        [ ]*                # ignore any spaces between closing quote and )
-                        )?                  # title is optional
-                    \)
+                    (?:
+                        \(                      # literal paren
+                            (?:
+                                [ ]*
+                                (?<href>{1})        # href
+                            )?                      # href is optional
+                            [ ]*
+                            (?:
+                                (?<quote>['""])     # quote char
+                                (?<title>.*?)       # title
+                                \k<quote>           # matching quote
+                                [ ]*                # ignore any spaces between closing quote and )
+                            )?                      # title is optional
+                        \)
+                    )?
                 )", GetNestedBracketsPattern(), GetNestedParensPattern()),
                   RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
@@ -690,13 +694,13 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string linkText = match.Groups[2].Value;
-            string url = match.Groups[3].Value;
-            string title = match.Groups[6].Value;
+            string linkText = match.Groups["text"].Value;
+            string url = match.Groups["href"].Value;
+            string title = match.Groups["title"].Value;
 
             var result = Create<Hyperlink, Inline>(RunSpanGamut(linkText));
             result.Command = HyperlinkCommand;
-            result.CommandParameter = url;
+            result.CommandParameter = string.IsNullOrEmpty(url) ? linkText : url;
             if (!string.IsNullOrWhiteSpace(title))
             {
                 result.ToolTip = title;
@@ -1479,9 +1483,11 @@ namespace Markdown.Xaml
         #region CodeBlock
         private static readonly Regex _codeBlock = new Regex(@"
                 \n
-                («)     # $1 = starting marker «
-                (.+?)   # $2 = Code text
-                »       # closing marker »
+                (```)     # $1 = starting marker ```
+                (.+?)?     # $2 = language (for syntax highlighting)
+                \n
+                (.+?)     # $3 = Code text
+                ```       # closing marker ```
                 \n+
             ", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
@@ -1505,8 +1511,8 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
             
-            var textAlignment = GetTextAlignment(match.Groups[2].Value);
-            var block = Create<Paragraph, Inline>(RunSpanGamut(Regex.Replace(match.Groups[2].Value, _alignment, "")));
+            var textAlignment = GetTextAlignment(match.Groups[3].Value);
+            var block = Create<Paragraph, Inline>(RunSpanGamut(Regex.Replace(match.Groups[3].Value, _alignment, "")));
             block.Style = CodeBlockStyle;
             block.TextAlignment = textAlignment;
             return block;
