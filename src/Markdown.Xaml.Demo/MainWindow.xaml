@@ -33,9 +33,6 @@
                         TableRowAltStyle="{StaticResource TableRowAltStyle}"
                         AssetPathRoot="{x:Static system:Environment.CurrentDirectory}"/>
 
-        <local:TextToFlowDocumentConverter x:Key="TextToFlowDocumentConverter" 
-                                          Markdown="{StaticResource Markdown}"/>
-
         <demo:BoolToEnabledConverter x:Key="BoolToEnabledConverter"/>
 
     </Window.Resources>
@@ -85,7 +82,7 @@
                                   VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
                                   Margin="5"
-                                  Document="{Binding TextPreview, Converter={StaticResource TextToFlowDocumentConverter}}"
+                                  Document="{Binding TextPreview, Converter={local:TextToFlowDocumentConverter Markdown={StaticResource Markdown}}}"
                                   BorderBrush="DimGray"
                                   BorderThickness="1"
                                   VerticalScrollBarVisibility="Auto"/>
@@ -99,7 +96,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="demoSource"
+                    <TextBox x:Name="DemoSource"
                              Grid.Row="0"
                              Grid.Column="0"
                              VerticalAlignment="Stretch"
@@ -118,7 +115,7 @@
                                   VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
                                   Margin="5"
-                                  Document="{Binding ElementName=demoSource, Path=Text, Converter={StaticResource TextToFlowDocumentConverter}}"
+                                  Document="{Binding ElementName=DemoSource, Path=Text, Converter={local:TextToFlowDocumentConverter Markdown={StaticResource Markdown}}}"
                                   BorderBrush="DimGray"
                                   BorderThickness="1"
                                   VerticalScrollBarVisibility="Auto"/>

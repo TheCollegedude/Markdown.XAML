@@ -83,9 +83,9 @@ namespace Markdown.Xaml.Tests
 
         private string LoadText(string name)
         {
-            using (Stream stream = Assembly.GetExecutingAssembly()
+            using (var stream = Assembly.GetExecutingAssembly()
                                .GetManifestResourceStream("Markdown.Xaml.Tests." + name))
-            using (StreamReader reader = new StreamReader(stream))
+            using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
             }

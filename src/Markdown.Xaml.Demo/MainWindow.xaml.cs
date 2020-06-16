@@ -1,27 +1,15 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Markdown.Demo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -29,19 +17,19 @@ namespace Markdown.Demo
 
             CommandBindings.Add(new CommandBinding(NavigationCommands.GoToPage, (sender, e) => Console.WriteLine((string)e.Parameter)));
 
-            this.DataContext = new DemoViewModel();
+            DataContext = new DemoViewModel();
         }
 
         private void Window_Loaded_1(object sender, RoutedEventArgs e)
         {
-            demoSource.Text = LoadSample();
+            DemoSource.Text = LoadSample();
         }
 
         private string LoadSample()
         {
             var subjectType = GetType();
             var subjectAssembly = subjectType.Assembly;
-            using (Stream stream = subjectAssembly.GetManifestResourceStream(subjectType.FullName + ".md"))
+            using (var stream = subjectAssembly.GetManifestResourceStream(subjectType.FullName + ".md"))
             {
                 if (stream is null)
                 {
@@ -51,7 +39,7 @@ namespace Markdown.Demo
                         subjectType.FullName);
                 }
 
-                using (StreamReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }
@@ -63,7 +51,7 @@ namespace Markdown.Demo
         /// </summary>
         private void Preview_Click(object sender, RoutedEventArgs e)
         {
-            ((DemoViewModel)this.DataContext).TextPreview = ((DemoViewModel)this.DataContext).TextMarkdown;
+            ((DemoViewModel)DataContext).TextPreview = ((DemoViewModel)DataContext).TextMarkdown;
         }
     }
 }

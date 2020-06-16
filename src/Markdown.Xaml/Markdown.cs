@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
@@ -16,7 +15,6 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 
@@ -27,169 +25,169 @@ namespace Markdown.Xaml
         /// <summary>
         /// maximum nested depth of [] and () supported by the transform; implementation detail
         /// </summary>
-        private const int _nestDepth = 6;
+        private const int NestDepth = 6;
 
         /// <summary>
         /// Tabs are automatically converted to spaces as part of the transform  
         /// this constant determines how "wide" those tabs become in spaces  
         /// </summary>
-        private const int _tabWidth = 4;
+        private const int TabWidth = 4;
 
         /// <summary>
         /// Default text alignment, equal to the one defined at document level.
         /// </summary>
         private static TextAlignment defaultTextAlignment = TextAlignment.Left;
-        
+
         #region Style
         public Style DocumentStyle
         {
-            get { return (Style)GetValue(DocumentStyleProperty); }
-            set { SetValue(DocumentStyleProperty, value); }
+            get => (Style)GetValue(DocumentStyleProperty);
+            set => SetValue(DocumentStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for DocumentStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DocumentStyleProperty =
-            DependencyProperty.Register("DocumentStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(DocumentStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style NormalParagraphStyle
         {
-            get { return (Style)GetValue(NormalParagraphStyleProperty); }
-            set { SetValue(NormalParagraphStyleProperty, value); }
+            get => (Style)GetValue(NormalParagraphStyleProperty);
+            set => SetValue(NormalParagraphStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for NormalParagraphStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NormalParagraphStyleProperty =
-            DependencyProperty.Register("NormalParagraphStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(NormalParagraphStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style Heading1Style
         {
-            get { return (Style)GetValue(Heading1StyleProperty); }
-            set { SetValue(Heading1StyleProperty, value); }
+            get => (Style)GetValue(Heading1StyleProperty);
+            set => SetValue(Heading1StyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Heading1Style.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty Heading1StyleProperty =
-            DependencyProperty.Register("Heading1Style", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Heading1Style), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style Heading2Style
         {
-            get { return (Style)GetValue(Heading2StyleProperty); }
-            set { SetValue(Heading2StyleProperty, value); }
+            get => (Style)GetValue(Heading2StyleProperty);
+            set => SetValue(Heading2StyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Heading2Style.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty Heading2StyleProperty =
-            DependencyProperty.Register("Heading2Style", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Heading2Style), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style Heading3Style
         {
-            get { return (Style)GetValue(Heading3StyleProperty); }
-            set { SetValue(Heading3StyleProperty, value); }
+            get => (Style)GetValue(Heading3StyleProperty);
+            set => SetValue(Heading3StyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Heading3Style.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty Heading3StyleProperty =
-            DependencyProperty.Register("Heading3Style", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Heading3Style), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style Heading4Style
         {
-            get { return (Style)GetValue(Heading4StyleProperty); }
-            set { SetValue(Heading4StyleProperty, value); }
+            get => (Style)GetValue(Heading4StyleProperty);
+            set => SetValue(Heading4StyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Heading4Style.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty Heading4StyleProperty =
-            DependencyProperty.Register("Heading4Style", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Heading4Style), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style Heading5Style
         {
-            get { return (Style)GetValue(Heading5StyleProperty); }
-            set { SetValue(Heading5StyleProperty, value); }
+            get => (Style)GetValue(Heading5StyleProperty);
+            set => SetValue(Heading5StyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Heading5Style.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty Heading5StyleProperty =
-            DependencyProperty.Register("Heading5Style", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Heading5Style), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style Heading6Style
         {
-            get { return (Style)GetValue(Heading6StyleProperty); }
-            set { SetValue(Heading6StyleProperty, value); }
+            get => (Style)GetValue(Heading6StyleProperty);
+            set => SetValue(Heading6StyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Heading6Style.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty Heading6StyleProperty =
-            DependencyProperty.Register("Heading6Style", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Heading6Style), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style BlockQuoteStyle
         {
-            get { return (Style)GetValue(BlockQuoteStyleProperty); }
-            set { SetValue(BlockQuoteStyleProperty, value); }
+            get => (Style)GetValue(BlockQuoteStyleProperty);
+            set => SetValue(BlockQuoteStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for BlockQuoteStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BlockQuoteStyleProperty =
-            DependencyProperty.Register("BlockQuoteStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(BlockQuoteStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style NoteStyle
         {
-            get { return (Style)GetValue(NoteStyleProperty); }
-            set { SetValue(NoteStyleProperty, value); }
+            get => (Style)GetValue(NoteStyleProperty);
+            set => SetValue(NoteStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for NoteStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NoteStyleProperty =
-            DependencyProperty.Register("NoteStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(NoteStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style CodeBlockStyle
         {
-            get { return (Style)GetValue(CodeBlockStyleProperty); }
-            set { SetValue(CodeBlockStyleProperty, value); }
+            get => (Style)GetValue(CodeBlockStyleProperty);
+            set => SetValue(CodeBlockStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for CodeBlockStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CodeBlockStyleProperty =
-            DependencyProperty.Register("CodeBlockStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(CodeBlockStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style CodeSpanStyle
         {
-            get { return (Style)GetValue(CodeSpanStyleProperty); }
-            set { SetValue(CodeSpanStyleProperty, value); }
+            get => (Style)GetValue(CodeSpanStyleProperty);
+            set => SetValue(CodeSpanStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for CodeSpanStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CodeSpanStyleProperty =
-            DependencyProperty.Register("CodeSpanStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(CodeSpanStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style LinkStyle
         {
-            get { return (Style)GetValue(LinkStyleProperty); }
-            set { SetValue(LinkStyleProperty, value); }
+            get => (Style)GetValue(LinkStyleProperty);
+            set => SetValue(LinkStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for LinkStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LinkStyleProperty =
-            DependencyProperty.Register("LinkStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(LinkStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style ImageStyle
         {
-            get { return (Style)GetValue(ImageStyleProperty); }
-            set { SetValue(ImageStyleProperty, value); }
+            get => (Style)GetValue(ImageStyleProperty);
+            set => SetValue(ImageStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ImageStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ImageStyleProperty =
-            DependencyProperty.Register("ImageStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ImageStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style ImageFailedStyle
         {
-            get { return (Style)GetValue(ImageFailedStyleProperty); }
-            set { SetValue(ImageFailedStyleProperty, value); }
+            get => (Style)GetValue(ImageFailedStyleProperty);
+            set => SetValue(ImageFailedStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ImageFailedStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ImageFailedStyleProperty =
-            DependencyProperty.Register("ImageFailedStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ImageFailedStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         //public Style ImageDownloadFailedStyle
         //{
@@ -199,22 +197,22 @@ namespace Markdown.Xaml
 
         //// Using a DependencyProperty as the backing store for ImageDownloadFailedStyle.  This enables animation, styling, binding, etc...
         //public static readonly DependencyProperty ImageDownloadFailedStyleProperty =
-        //    DependencyProperty.Register("ImageDownloadFailedStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+        //    DependencyProperty.Register(nameof(ImageDownloadFailedStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style SeparatorStyle
         {
-            get { return (Style)GetValue(SeparatorStyleProperty); }
-            set { SetValue(SeparatorStyleProperty, value); }
+            get => (Style)GetValue(SeparatorStyleProperty);
+            set => SetValue(SeparatorStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SeparatorStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SeparatorStyleProperty =
-            DependencyProperty.Register("SeparatorStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(SeparatorStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public string AssetPathRoot
         {
-            get { return (string)GetValue(AssetPathRootProperty); }
-            set { SetValue(AssetPathRootProperty, value); }
+            get => (string)GetValue(AssetPathRootProperty);
+            set => SetValue(AssetPathRootProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for AssetPathRoot.
@@ -223,43 +221,43 @@ namespace Markdown.Xaml
 
         public Style TableStyle
         {
-            get { return (Style)GetValue(TableStyleProperty); }
-            set { SetValue(TableStyleProperty, value); }
+            get => (Style)GetValue(TableStyleProperty);
+            set => SetValue(TableStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for TableStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TableStyleProperty =
-            DependencyProperty.Register("TableStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(TableStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style TableHeaderStyle
         {
-            get { return (Style)GetValue(TableHeaderStyleProperty); }
-            set { SetValue(TableHeaderStyleProperty, value); }
+            get => (Style)GetValue(TableHeaderStyleProperty);
+            set => SetValue(TableHeaderStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for TableHeaderStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TableHeaderStyleProperty =
-            DependencyProperty.Register("TableHeaderStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(TableHeaderStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style TableBodyStyle
         {
-            get { return (Style)GetValue(TableBodyStyleProperty); }
-            set { SetValue(TableBodyStyleProperty, value); }
+            get => (Style)GetValue(TableBodyStyleProperty);
+            set => SetValue(TableBodyStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for TableBodyStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TableBodyStyleProperty =
-            DependencyProperty.Register("TableBodyStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(TableBodyStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style TableRowAltStyle
         {
-            get { return (Style)GetValue(TableRowAltStyleProperty); }
-            set { SetValue(TableRowAltStyleProperty, value); }
+            get => (Style)GetValue(TableRowAltStyleProperty);
+            set => SetValue(TableRowAltStyleProperty, value);
         }
         // Using a DependencyProperty as the backing store for TableRowAltStyle.  This enables animation, styling, binding, etc...
 
         public static readonly DependencyProperty TableRowAltStyleProperty =
-            DependencyProperty.Register("TableRowAltStyle", typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(TableRowAltStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
         #endregion Style
 
         public Markdown()
@@ -278,7 +276,7 @@ namespace Markdown.Xaml
 
             defaultTextAlignment = GetTextAlignment(text);
 
-            text = Regex.Replace(text, _alignment, "");
+            text = Regex.Replace(text, Alignment, "");
             text = new Regex(@"^\n+", RegexOptions.Compiled).Replace(text, "");
 
             var document = Create<FlowDocument, Block>(RunBlockGamut(text));
@@ -313,7 +311,7 @@ namespace Markdown.Xaml
                 s4 => DoLists(s4,
                 s5 => DoTable(s5,
                 s6 => DoBlockQuotes(s6,
-                sn => FormParagraphs(sn))))))));
+                FormParagraphs)))))));
 
             //// We already ran HashHTMLBlocks() before, in Markdown(), but that
             //// was to escape raw HTML in the original Markdown source. This time,
@@ -341,7 +339,7 @@ namespace Markdown.Xaml
                 s2 => DoImages(s2,
                 s3 => DoAnchors(s3,
                 s4 => DoTextDecorations(s4,
-                sn => DoText(sn))))));
+                DoText)))));
 
             //text = EscapeSpecialCharsWithinTagAttributes(text);
             //text = EscapeBackslashes(text);
@@ -361,20 +359,20 @@ namespace Markdown.Xaml
             //return text;
         }
 
-        private IEnumerable<Inline> RunSpan(string text)
+        private static IEnumerable<Inline> RunSpan(string text)
         {
             foreach (var line in text.Split('\r', '\n'))
             {
-                var t = _eoln.Replace(line, " ");
+                var t = Eoln.Replace(line, " ");
                 yield return new Run(t);
                 yield return new LineBreak();
             }
         }
 
-        private static readonly Regex _newlinesLeadingTrailing = new Regex(@"^\n+|\n+\z", RegexOptions.Compiled);
-        private static readonly Regex _newlinesMultiple = new Regex(@"\n{2,}", RegexOptions.Compiled);
-        private static readonly Regex _leadingWhitespace = new Regex(@"^[ ]*", RegexOptions.Compiled);
-        private const string _alignment = @"^\|-\||^\|:-\||^\|-:\||^\|:-:\||^\|=\|";
+        private static readonly Regex NewlinesLeadingTrailing = new Regex(@"^\n+|\n+\z", RegexOptions.Compiled);
+        private static readonly Regex NewlinesMultiple = new Regex(@"\n{2,}", RegexOptions.Compiled);
+        private static readonly Regex LeadingWhitespace = new Regex(@"^[ ]*", RegexOptions.Compiled);
+        private const string Alignment = @"^\|-\||^\|:-\||^\|-:\||^\|:-:\||^\|=\|";
 
         /// <summary>
         /// splits on two or more newlines, to form "paragraphs";    
@@ -387,12 +385,12 @@ namespace Markdown.Xaml
             }
 
             // split on two or more newlines
-            string[] grafs = _newlinesMultiple.Split(_newlinesLeadingTrailing.Replace(text, ""));
+            var grafs = NewlinesMultiple.Split(NewlinesLeadingTrailing.Replace(text, ""));
 
             foreach (var g in grafs)
             {
                 var textAlignment = GetTextAlignment(text);
-                var block = Create<Paragraph, Inline>(RunSpanGamut(Regex.Replace(g, _alignment, "")));
+                var block = Create<Paragraph, Inline>(RunSpanGamut(Regex.Replace(g, Alignment, "")));
                 block.Style = NormalParagraphStyle;
                 block.TextAlignment = textAlignment;
                 yield return block;
@@ -409,18 +407,15 @@ namespace Markdown.Xaml
         {
             // in other words [this] and [this[also]] and [this[also[too]]]
             // up to _nestDepth
-            if (_nestedBracketsPattern is null)
-                _nestedBracketsPattern =
-                    RepeatString(@"
+            return _nestedBracketsPattern ?? (_nestedBracketsPattern = RepeatString(@"
                     (?>              # Atomic matching
                        [^\[\]]+      # Anything other than brackets
                      |
                        \[
-                           ", _nestDepth) + RepeatString(
-                    @" \]
+                           ", NestDepth) + RepeatString(
+                @" \]
                     )*"
-                    , _nestDepth);
-            return _nestedBracketsPattern;
+                , NestDepth));
         }
 
         private static string _nestedParensPattern;
@@ -433,18 +428,15 @@ namespace Markdown.Xaml
         {
             // in other words (this) and (this(also)) and (this(also(too)))
             // up to _nestDepth
-            if (_nestedParensPattern is null)
-                _nestedParensPattern =
-                    RepeatString(@"
+            return _nestedParensPattern ?? (_nestedParensPattern = RepeatString(@"
                     (?>              # Atomic matching
                        [^()\s]+      # Anything other than parens or whitespace
                      |
                        \(
-                           ", _nestDepth) + RepeatString(
-                    @" \)
+                           ", NestDepth) + RepeatString(
+                @" \)
                     )*"
-                    , _nestDepth);
-            return _nestedParensPattern;
+                , NestDepth));
         }
 
         private static string _nestedParensPatternWithWhiteSpace;
@@ -457,22 +449,19 @@ namespace Markdown.Xaml
         {
             // in other words (this) and (this(also)) and (this(also(too)))
             // up to _nestDepth
-            if (_nestedParensPatternWithWhiteSpace is null)
-                _nestedParensPatternWithWhiteSpace =
-                    RepeatString(@"
+            return _nestedParensPatternWithWhiteSpace ?? (_nestedParensPatternWithWhiteSpace = RepeatString(@"
                     (?>              # Atomic matching
                        [^()]+        # Anything other than parens
                      |
                        \(
-                           ", _nestDepth) + RepeatString(
-                    @" \)
+                           ", NestDepth) + RepeatString(
+                @" \)
                     )*"
-                    , _nestDepth);
-            return _nestedParensPatternWithWhiteSpace;
+                , NestDepth));
         }
 
         #region Image
-        private static readonly Regex _imageInline = new Regex(
+        private static readonly Regex ImageInline = new Regex(
             string.Format(CultureInfo.InvariantCulture, @"
                 (                           # wrap whole match in $1
                     !\[
@@ -505,7 +494,7 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return Evaluate(text, _imageInline, ImageInlineEvaluator, defaultHandler);
+            return Evaluate(text, ImageInline, ImageInlineEvaluator, defaultHandler);
         }
 
         private Inline ImageInlineEvaluator(Match match)
@@ -515,16 +504,16 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string imageAlt = match.Groups[2].Value;
-            string url = match.Groups[3].Value;
-            string tag = match.Groups[6].Value;
+            var imageAlt = match.Groups[2].Value;
+            var url = match.Groups[3].Value;
+            var tag = match.Groups[6].Value;
 
-            BitmapImage imgSource = null;
+            BitmapImage imgSource;
             try
             {
-                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute) && !System.IO.Path.IsPathRooted(url))
+                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute) && !Path.IsPathRooted(url))
                 {
-                    url = System.IO.Path.Combine(AssetPathRoot ?? string.Empty, url);
+                    url = Path.Combine(AssetPathRoot ?? string.Empty, url);
                 }
 
                 imgSource = CreateBitmapImage(url);
@@ -534,7 +523,7 @@ namespace Markdown.Xaml
                 //return new Run("!" + (!string.IsNullOrEmpty(imageAlt) ? imageAlt : url)) { Style = ImageDownloadFailedStyle };                
 
                 imgSource = CreateBitmapImage();
-                Image img = new Image()
+                var img = new Image()
                 {
                     Source = imgSource,
                     Width = imgSource.Width,
@@ -544,7 +533,7 @@ namespace Markdown.Xaml
                 return new InlineUIContainer(img);
             }
 
-            Image image = new Image { Source = imgSource, Tag = tag };
+            var image = new Image { Source = imgSource, Tag = tag };
             if (!string.IsNullOrWhiteSpace(imageAlt))
             {
                 image.ToolTip = imageAlt;
@@ -561,23 +550,21 @@ namespace Markdown.Xaml
             // Bind size so document is updated when image is downloaded
             if (imgSource.IsDownloading)
             {
-                Binding binding = new Binding(nameof(BitmapImage.Width));
-                binding.Source = imgSource;
-                binding.Mode = BindingMode.OneWay;
+                var binding = new Binding(nameof(BitmapImage.Width)) {Source = imgSource, Mode = BindingMode.OneWay};
 
-                BindingExpressionBase bindingExpression = BindingOperations.SetBinding(image, Image.WidthProperty, binding);
+                var bindingExpression = BindingOperations.SetBinding(image, FrameworkElement.WidthProperty, binding);
                 
-                void downloadCompletedHandler(object sender, EventArgs e)
+                void DownloadCompletedHandler(object sender, EventArgs e)
                 {
-                    imgSource.DownloadCompleted -= downloadCompletedHandler;
-                    imgSource.DownloadFailed -= downloadFailedHandler;
+                    imgSource.DownloadCompleted -= DownloadCompletedHandler;
+                    imgSource.DownloadFailed -= DownloadFailedHandler;
                     bindingExpression.UpdateTarget();
                 }
 
-                void downloadFailedHandler(object sender, EventArgs e)
+                void DownloadFailedHandler(object sender, EventArgs e)
                 {
-                    imgSource.DownloadCompleted -= downloadCompletedHandler;
-                    imgSource.DownloadFailed -= downloadFailedHandler;
+                    imgSource.DownloadCompleted -= DownloadCompletedHandler;
+                    imgSource.DownloadFailed -= DownloadFailedHandler;
                     // default image when download failed
                     imgSource = CreateBitmapImage();
                     image.Source = imgSource;
@@ -586,8 +573,8 @@ namespace Markdown.Xaml
                     image.Style = ImageFailedStyle;
                 }
 
-                imgSource.DownloadCompleted += downloadCompletedHandler;
-                imgSource.DownloadFailed += downloadFailedHandler;
+                imgSource.DownloadCompleted += DownloadCompletedHandler;
+                imgSource.DownloadFailed += DownloadFailedHandler;
             }
             else
             {
@@ -601,7 +588,7 @@ namespace Markdown.Xaml
         /// Return a BitmapImage to add it as a source to the Image.
         /// </summary>
         /// <param name="url">Url of the image to load.</param>
-        private BitmapImage CreateBitmapImage(string url = null)
+        private static BitmapImage CreateBitmapImage(string url = null)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -656,7 +643,7 @@ namespace Markdown.Xaml
         #region HyperLink
         public ICommand HyperlinkCommand { get; set; }
 
-        private static readonly Regex _anchorInline = new Regex(
+        private static readonly Regex AnchorInline = new Regex(
             string.Format(CultureInfo.InvariantCulture, @"
                 (                           # wrap whole match
                     \[
@@ -694,7 +681,7 @@ namespace Markdown.Xaml
             }
 
             // Next, inline-style links: [link text](url "optional title")
-            return Evaluate(text, _anchorInline, AnchorInlineEvaluator, defaultHandler);
+            return Evaluate(text, AnchorInline, AnchorInlineEvaluator, defaultHandler);
         }
 
         private Inline AnchorInlineEvaluator(Match match)
@@ -704,9 +691,9 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string linkText = match.Groups["text"].Value;
-            string url = match.Groups["href"].Value;
-            string title = match.Groups["title"].Value;
+            var linkText = match.Groups["text"].Value;
+            var url = match.Groups["href"].Value;
+            var title = match.Groups["title"].Value;
 
             var result = Create<Hyperlink, Inline>(RunSpanGamut(linkText));
             result.Command = HyperlinkCommand;
@@ -722,7 +709,7 @@ namespace Markdown.Xaml
         #endregion HyperLink
 
         #region Header
-        private static readonly Regex _headerSetext = new Regex(@"
+        private static readonly Regex HeaderSetext = new Regex(@"
                 ^(.+?)
                 [ ]*
                 \n
@@ -731,7 +718,7 @@ namespace Markdown.Xaml
                 \n+
             ", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
-        private static readonly Regex _headerAtx = new Regex(@"
+        private static readonly Regex HeaderAtx = new Regex(@"
                 ^(\#{1,6})  # $1 = string of #'s
                 [ ]*
                 (.+?)       # $2 = Header text
@@ -763,8 +750,8 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return Evaluate<Block>(text, _headerSetext, m => SetextHeaderEvaluator(m),
-                s => Evaluate<Block>(s, _headerAtx, m => AtxHeaderEvaluator(m), defaultHandler));
+            return Evaluate(text, HeaderSetext, SetextHeaderEvaluator,
+                s => Evaluate(s, HeaderAtx, AtxHeaderEvaluator, defaultHandler));
         }
 
         private Block SetextHeaderEvaluator(Match match)
@@ -774,8 +761,8 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string header = match.Groups[1].Value;
-            int level = match.Groups[2].Value.StartsWith("=", StringComparison.Ordinal) ? 1 : 2;
+            var header = match.Groups[1].Value;
+            var level = match.Groups[2].Value.StartsWith("=", StringComparison.Ordinal) ? 1 : 2;
 
             //TODO: Style the paragraph based on the header level
             return CreateHeader(level, RunSpanGamut(header.Trim()));
@@ -788,10 +775,10 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string header = match.Groups[2].Value;
-            int level = match.Groups[1].Value.Length;
+            var header = match.Groups[2].Value;
+            var level = match.Groups[1].Value.Length;
             var textAlignment = GetTextAlignment(header);
-            return CreateHeader(level, RunSpanGamut(Regex.Replace(header, _alignment, "")), textAlignment);
+            return CreateHeader(level, RunSpanGamut(Regex.Replace(header, Alignment, "")), textAlignment);
         }
 
         public Block CreateHeader(int level, IEnumerable<Inline> content, TextAlignment textAlignment = TextAlignment.Left)
@@ -832,7 +819,7 @@ namespace Markdown.Xaml
         #endregion Header
 
         #region BlockQuotes
-        private static readonly Regex _blockquotes = new Regex(@"
+        private static readonly Regex Blockquotes = new Regex(@"
                 ^(\>{1,9})  # $1 = string of >'s
                 [ ]*
                 (.+?)       # $2 = Header text
@@ -856,7 +843,7 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return Evaluate<Block>(text, _blockquotes, m => BlockQuotesEvaluator(m), defaultHandler);
+            return Evaluate(text, Blockquotes, BlockQuotesEvaluator, defaultHandler);
         }
 
         private Block BlockQuotesEvaluator(Match match)
@@ -866,10 +853,10 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string text = match.Groups[2].Value;
-            int level = match.Groups[1].Value.Length;
+            var text = match.Groups[2].Value;
+            var level = match.Groups[1].Value.Length;
             var textAlignment = GetTextAlignment(text);
-            return CreateBlockQuotes(level, RunSpanGamut(Regex.Replace(text, _alignment, "")), textAlignment);
+            return CreateBlockQuotes(level, RunSpanGamut(Regex.Replace(text, Alignment, "")), textAlignment);
         }
 
         public Block CreateBlockQuotes(int level, IEnumerable<Inline> content, TextAlignment textAlignment = TextAlignment.Left)
@@ -923,7 +910,7 @@ namespace Markdown.Xaml
         #endregion BlockQuotes
 
         #region Note
-        private static readonly Regex _note = new Regex(@"
+        private static readonly Regex Note = new Regex(@"
                 ^(\<)       # $1 = starting marker <
                 [ ]*
                 (.+?)       # $2 = Header text
@@ -936,7 +923,7 @@ namespace Markdown.Xaml
         /// Turn Markdown into HTML paragraphs.
         /// </summary>
         /// <remarks>
-        /// < Note
+        /// Note
         /// </remarks>
         private IEnumerable<Block> DoNote(string text, Func<string, IEnumerable<Block>> defaultHandler)
         {
@@ -945,7 +932,7 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return Evaluate<Block>(text, _note, m => NoteEvaluator(m), defaultHandler);
+            return Evaluate(text, Note, NoteEvaluator, defaultHandler);
         }
 
         private Block NoteEvaluator(Match match)
@@ -955,9 +942,9 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string text = match.Groups[2].Value;
+            var text = match.Groups[2].Value;
             var textAlignment = GetTextAlignment(text);
-            return NoteComment(RunSpanGamut(Regex.Replace(text, _alignment, "")), textAlignment);
+            return NoteComment(RunSpanGamut(Regex.Replace(text, Alignment, "")), textAlignment);
         }
 
         public Block NoteComment(IEnumerable<Inline> content, TextAlignment textAlignment = TextAlignment.Left)
@@ -976,10 +963,10 @@ namespace Markdown.Xaml
         #endregion Note
 
         #region Horizontal Rules
-        private static readonly Regex _horizontalRules = HorizontalRulesRegex("-");
-        private static readonly Regex _horizontalTwoLinesRules = HorizontalRulesRegex("=");
-        private static readonly Regex _horizontalBoldRules = HorizontalRulesRegex("*");
-        private static readonly Regex _horizontalBoldWithSingleRules = HorizontalRulesRegex("_");
+        private static readonly Regex HorizontalRules = HorizontalRulesRegex("-");
+        private static readonly Regex HorizontalTwoLinesRules = HorizontalRulesRegex("=");
+        private static readonly Regex HorizontalBoldRules = HorizontalRulesRegex("*");
+        private static readonly Regex HorizontalBoldWithSingleRules = HorizontalRulesRegex("_");
 
         /// <summary>
         /// Create regex expression for horizontal rules.
@@ -1016,10 +1003,10 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return Evaluate(text, _horizontalRules, RuleEvaluator,
-                s1 => Evaluate(s1, _horizontalTwoLinesRules, TwoLinesRuleEvaluator,
-                s2 => Evaluate(s2, _horizontalBoldRules, BoldRuleEvaluator,
-                s3 => Evaluate(s3, _horizontalBoldWithSingleRules, BoldWithSingleRuleEvaluator, defaultHandler))));
+            return Evaluate(text, HorizontalRules, RuleEvaluator,
+                s1 => Evaluate(s1, HorizontalTwoLinesRules, TwoLinesRuleEvaluator,
+                s2 => Evaluate(s2, HorizontalBoldRules, BoldRuleEvaluator,
+                s3 => Evaluate(s3, HorizontalBoldWithSingleRules, BoldWithSingleRuleEvaluator, defaultHandler))));
         }
 
         /// <summary>
@@ -1049,7 +1036,7 @@ namespace Markdown.Xaml
             }
 
             var stackPanel = new StackPanel();
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
                 stackPanel.Children.Add(new Separator()
                 {
@@ -1071,7 +1058,7 @@ namespace Markdown.Xaml
             }
 
             var stackPanel = new StackPanel();
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
                 stackPanel.Children.Add(new Separator()
                 {
@@ -1094,7 +1081,7 @@ namespace Markdown.Xaml
             }
 
             var stackPanel = new StackPanel();
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
                 stackPanel.Children.Add(new Separator()
                 {
@@ -1112,21 +1099,21 @@ namespace Markdown.Xaml
         #endregion Horizontal Rules
 
         #region List
-        private const string _markerUL = @"[*+=-]";
-        private const string _markerOL = @"\d+[.]|\p{L}+[.,]";
+        private const string MarkerUl = @"[*+=-]";
+        private const string MarkerOl = @"\d+[.]|\p{L}+[.,]";
 
         // Unordered List
-        private const string _markerUL_Disc = @"[*]";
-        private const string _markerUL_Box = @"[+]";
-        private const string _markerUL_Circle = @"[-]";
-        private const string _markerUL_Square = @"[=]";
+        private const string MarkerUlDisc = @"[*]";
+        private const string MarkerUlBox = @"[+]";
+        private const string MarkerUlCircle = @"[-]";
+        private const string MarkerUlSquare = @"[=]";
 
         // Ordered List
-        private const string _markerOL_Number = @"\d+[.]";
-        private const string _markerOL_LetterLower = @"\p{Ll}+[.]";
-        private const string _markerOL_LetterUpper = @"\p{Lu}+[.]";
-        private const string _markerOL_RomanLower = @"\p{Ll}+[,]";
-        private const string _markerOL_RomanUpper = @"\p{Lu}+[,]";
+        private const string MarkerOlNumber = @"\d+[.]";
+        private const string MarkerOlLetterLower = @"\p{Ll}+[.]";
+        private const string MarkerOlLetterUpper = @"\p{Lu}+[.]";
+        private const string MarkerOlRomanLower = @"\p{Ll}+[,]";
+        private const string MarkerOlRomanUpper = @"\p{Lu}+[,]";
 
         private int _listLevel;
 
@@ -1134,9 +1121,9 @@ namespace Markdown.Xaml
         /// Maximum number of levels a single list can have.
         /// In other words, _listDepth - 1 is the maximum number of nested lists.
         /// </summary>
-        private const int _listDepth = 6;
+        private const int ListDepth = 6;
 
-        private static readonly string _wholeList
+        private static readonly string WholeList
             = string.Format(CultureInfo.InvariantCulture, @"
             (                               # $1 = whole list
               (                             # $2
@@ -1155,12 +1142,12 @@ namespace Markdown.Xaml
                     {0}[ ]+
                   )
               )
-            )", string.Format(CultureInfo.InvariantCulture, "(?:{0}|{1})", _markerUL, _markerOL), _listDepth - 1);
+            )", string.Format(CultureInfo.InvariantCulture, "(?:{0}|{1})", MarkerUl, MarkerOl), ListDepth - 1);
 
-        private static readonly Regex _listNested = new Regex(@"^" + _wholeList,
+        private static readonly Regex ListNested = new Regex(@"^" + WholeList,
             RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
-        private static readonly Regex _listTopLevel = new Regex(@"(?:(?<=\n\n)|\A\n?)" + _wholeList,
+        private static readonly Regex ListTopLevel = new Regex(@"(?:(?<=\n\n)|\A\n?)" + WholeList,
             RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
         /// <summary>
@@ -1176,9 +1163,9 @@ namespace Markdown.Xaml
             // We use a different prefix before nested lists than top-level lists.
             // See extended comment in _ProcessListItems().
             if (_listLevel > 0)
-                return Evaluate(text, _listNested, ListEvaluator, defaultHandler);
+                return Evaluate(text, ListNested, ListEvaluator, defaultHandler);
             else
-                return Evaluate(text, _listTopLevel, ListEvaluator, defaultHandler);
+                return Evaluate(text, ListTopLevel, ListEvaluator, defaultHandler);
         }
 
         private Block ListEvaluator(Match match)
@@ -1188,17 +1175,17 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string list = match.Groups[1].Value;
-            string listType = Regex.IsMatch(match.Groups[3].Value, _markerUL) ? "ul" : "ol";
+            var list = match.Groups[1].Value;
+            var listType = Regex.IsMatch(match.Groups[3].Value, MarkerUl) ? "ul" : "ol";
 
             // Set text marker style.
-            TextMarkerStyle textMarker = GetTextMarkerStyle(listType, match);
+            var textMarker = GetTextMarkerStyle(listType, match);
 
             // Turn double returns into triple returns, so that we can make a
             // paragraph for the last item in a list, if necessary:
             list = Regex.Replace(list, @"\n{2,}", "\n\n\n");
 
-            var resultList = Create<List, ListItem>(ProcessListItems(list, listType == "ul" ? _markerUL : _markerOL));
+            var resultList = Create<List, ListItem>(ProcessListItems(list, listType == "ul" ? MarkerUl : MarkerOl));
 
             resultList.MarkerStyle = textMarker;
 
@@ -1238,7 +1225,7 @@ namespace Markdown.Xaml
                 // Trim trailing blank lines:
                 list = Regex.Replace(list, @"\n{2,}\z", "\n");
 
-                string pattern = string.Format(CultureInfo.InvariantCulture,
+                var pattern = string.Format(CultureInfo.InvariantCulture,
                   @"(\n)?                  # leading line = $1
                 (^[ ]*)                    # leading whitespace = $2
                 ({0}) [ ]+                 # list marker = $3
@@ -1266,8 +1253,8 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string item = match.Groups[4].Value;
-            string leadingLine = match.Groups[1].Value;
+            var item = match.Groups[4].Value;
+            var leadingLine = match.Groups[1].Value;
 
             if (!String.IsNullOrEmpty(leadingLine) || Regex.IsMatch(item, @"\n{2,}"))
                 // we could correct any bad indentation here..
@@ -1283,46 +1270,47 @@ namespace Markdown.Xaml
         /// Get the text marker style based on a specific regex.
         /// </summary>
         /// <param name="listType">Specify what kind of list: ul, ol.</param>
+        /// <param name="match"></param>
         private static TextMarkerStyle GetTextMarkerStyle(string listType, Match match)
         {
             switch (listType)
             {
                 case "ul":
-                    if (Regex.IsMatch(match.Groups[3].Value, _markerUL_Disc))
+                    if (Regex.IsMatch(match.Groups[3].Value, MarkerUlDisc))
                     {
                         return TextMarkerStyle.Disc;
                     }
-                    else if (Regex.IsMatch(match.Groups[3].Value, _markerUL_Box))
+                    else if (Regex.IsMatch(match.Groups[3].Value, MarkerUlBox))
                     {
                         return TextMarkerStyle.Box;
                     }
-                    else if (Regex.IsMatch(match.Groups[3].Value, _markerUL_Circle))
+                    else if (Regex.IsMatch(match.Groups[3].Value, MarkerUlCircle))
                     {
                         return TextMarkerStyle.Circle;
                     }
-                    else if (Regex.IsMatch(match.Groups[3].Value, _markerUL_Square))
+                    else if (Regex.IsMatch(match.Groups[3].Value, MarkerUlSquare))
                     {
                         return TextMarkerStyle.Square;
                     }
                     break;
                 case "ol":
-                    if (Regex.IsMatch(match.Groups[3].Value, _markerOL_Number))
+                    if (Regex.IsMatch(match.Groups[3].Value, MarkerOlNumber))
                     {
                         return TextMarkerStyle.Decimal;
                     }
-                    else if (Regex.IsMatch(match.Groups[3].Value, _markerOL_LetterLower))
+                    else if (Regex.IsMatch(match.Groups[3].Value, MarkerOlLetterLower))
                     {
                         return TextMarkerStyle.LowerLatin;
                     }
-                    else if (Regex.IsMatch(match.Groups[3].Value, _markerOL_LetterUpper))
+                    else if (Regex.IsMatch(match.Groups[3].Value, MarkerOlLetterUpper))
                     {
                         return TextMarkerStyle.UpperLatin;
                     }
-                    else if (Regex.IsMatch(match.Groups[3].Value, _markerOL_RomanLower))
+                    else if (Regex.IsMatch(match.Groups[3].Value, MarkerOlRomanLower))
                     {
                         return TextMarkerStyle.LowerRoman;
                     }
-                    else if (Regex.IsMatch(match.Groups[3].Value, _markerOL_RomanUpper))
+                    else if (Regex.IsMatch(match.Groups[3].Value, MarkerOlRomanUpper))
                     {
                         return TextMarkerStyle.UpperRoman;
                     }
@@ -1333,7 +1321,7 @@ namespace Markdown.Xaml
         #endregion List
 
         #region Table
-        private static readonly Regex _table = new Regex(@"
+        private static readonly Regex Table = new Regex(@"
             (                               # $1 = whole table
                 [ \r\n]*
                 (                           # $2 = table header
@@ -1359,7 +1347,7 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return Evaluate(text, _table, TableEvalutor, defaultHandler);
+            return Evaluate(text, Table, TableEvalutor, defaultHandler);
         }
 
         private Block TableEvalutor(Match match)
@@ -1373,7 +1361,7 @@ namespace Markdown.Xaml
             var header = match.Groups[2].Value.Trim();
             var style = match.Groups[4].Value.Trim();
             var row = match.Groups[6].Value.Trim();
-            var rowAlt = style.Substring(0, 1) == "=" ? true : false;
+            var rowAlt = style.Substring(0, 1) == "=";
 
             var styles = style.Substring(1 + Convert.ToInt32(rowAlt), style.Length - (2 + Convert.ToInt32(rowAlt))).Split('|');
             var headers = header.Substring(1, header.Length - 2).Split('|');
@@ -1383,7 +1371,7 @@ namespace Markdown.Xaml
                 return trimRitm.Substring(1, trimRitm.Length - 2).Split('|');
             }).ToList();
 
-            int maxColCount =
+            var maxColCount =
                 Math.Max(
                     Math.Max(styles.Length, headers.Length),
                     rowList.Select(ritm => ritm.Length).Max()
@@ -1434,26 +1422,26 @@ namespace Markdown.Xaml
             }
 
             // table header
-            var tableHeaderRG = new TableRowGroup()
+            var tableHeaderRg = new TableRowGroup()
             {
                 Style = TableHeaderStyle
             };
 
             var tableHeader = CreateTableRow(headers, aligns);
-            tableHeaderRG.Rows.Add(tableHeader);
-            table.RowGroups.Add(tableHeaderRG);
+            tableHeaderRg.Rows.Add(tableHeader);
+            table.RowGroups.Add(tableHeaderRg);
 
             // row
-            var tableBodyRG = new TableRowGroup()
+            var tableBodyRg = new TableRowGroup()
             {
                 Style = TableBodyStyle
             };
-            foreach (string[] rowAry in rowList)
+            foreach (var rowAry in rowList)
             {
                 var tableBody = CreateTableRow(rowAry, aligns, rowAlt && (rowList.IndexOf(rowAry) % 2) == 1 );
-                tableBodyRG.Rows.Add(tableBody);
+                tableBodyRg.Rows.Add(tableBody);
             }
-            table.RowGroups.Add(tableBodyRG);
+            table.RowGroups.Add(tableBodyRg);
 
             return table;
         }
@@ -1491,13 +1479,13 @@ namespace Markdown.Xaml
         #endregion Table
 
         #region CodeBlock
-        private static readonly Regex _codeBlock = new Regex(@"
+        private static readonly Regex CodeBlock = new Regex(@"
                 \n
                 \s*```               # starting marker ```
-                (?<lang>\w+?)?     # language (for syntax highlighting)
+                (?<lang>\w+?)?       # language (for syntax highlighting)
                 \s*\n
-                (?<code>.+?)      # code text
-                \s*```\s*               # closing marker ```
+                (?<code>.+?)         # code text
+                \s*```\s*            # closing marker ```
                 \n+
             ", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
@@ -1511,7 +1499,7 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return Evaluate(text, _codeBlock, CodeBlockEvaluator, defaultHandler);
+            return Evaluate(text, CodeBlock, CodeBlockEvaluator, defaultHandler);
         }
 
         private Block CodeBlockEvaluator(Match match)
@@ -1529,7 +1517,7 @@ namespace Markdown.Xaml
         #endregion CodeBlock
 
         #region CodeSpan
-        private static readonly Regex _codeSpan = new Regex(@"
+        private static readonly Regex CodeSpan = new Regex(@"
                 (?<!\\)   # Character before opening ` can't be a backslash
                 (`+)      # $1 = Opening run of `
                 (.+?)     # $2 = The code block
@@ -1570,7 +1558,7 @@ namespace Markdown.Xaml
             //          ... type <code>`bar`</code> ...         
             //
 
-            return Evaluate(text, _codeSpan, CodeSpanEvaluator, defaultHandler);
+            return Evaluate(text, CodeSpan, CodeSpanEvaluator, defaultHandler);
         }
 
         private Inline CodeSpanEvaluator(Match match)
@@ -1580,7 +1568,7 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string span = match.Groups[2].Value;
+            var span = match.Groups[2].Value;
             span = Regex.Replace(span, @"^[ ]*", ""); // leading whitespace
             span = Regex.Replace(span, @"[ ]*$", ""); // trailing whitespace
 
@@ -1592,16 +1580,16 @@ namespace Markdown.Xaml
         #endregion CodeSpan
 
         #region Text Decorations
-        private static readonly Regex _bold = new Regex(@"(\*\*) (?=\S) (.+?[*_]*) (?<=\S) \1",
+        private static readonly Regex Bold = new Regex(@"(\*\*) (?=\S) (.+?[*_]*) (?<=\S) \1",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
-        private static readonly Regex _italic = new Regex(@"(\*) (?=\S) (.+?) (?<=\S) \1",
+        private static readonly Regex Italic = new Regex(@"(\*) (?=\S) (.+?) (?<=\S) \1",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
-        private static readonly Regex _strikethrough = new Regex(@"(__) (?=\S) (.+?[*_]*) (?<=\S) \1",
+        private static readonly Regex Strikethrough = new Regex(@"(__) (?=\S) (.+?[*_]*) (?<=\S) \1",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
-        private static readonly Regex _underline = new Regex(@"(_) (?=\S) (.+?) (?<=\S) \1",
+        private static readonly Regex Underline = new Regex(@"(_) (?=\S) (.+?) (?<=\S) \1",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
         /// <summary>
@@ -1615,11 +1603,11 @@ namespace Markdown.Xaml
             }
 
             // <strong> must go first, then <em>
-            return Evaluate<Inline>(text, _bold, m => BoldEvaluator(m, 2),
-                s1 => Evaluate<Inline>(s1, _italic, m => ItalicEvaluator(m, 2),
-                s2 => Evaluate<Inline>(s2, _strikethrough, m => StrikethroughEvaluator(m, 2),
-                s3 => Evaluate<Inline>(s3, _underline, m => UnderlineEvaluator(m, 2),
-                s4 => defaultHandler(s4)))));
+            return Evaluate(text, Bold, m => BoldEvaluator(m, 2),
+                s1 => Evaluate(s1, Italic, m => ItalicEvaluator(m, 2),
+                s2 => Evaluate(s2, Strikethrough, m => StrikethroughEvaluator(m, 2),
+                s3 => Evaluate(s3, Underline, m => UnderlineEvaluator(m, 2),
+                defaultHandler))));
         }
 
         private Inline BoldEvaluator(Match match, int contentGroup)
@@ -1668,7 +1656,7 @@ namespace Markdown.Xaml
         #endregion Text Decorations
 
         #region Color
-        private static readonly Regex _color = new Regex(
+        private static readonly Regex Color = new Regex(
             string.Format(CultureInfo.InvariantCulture, @"
                 (                           # wrap whole match in $1
                     color\/\[
@@ -1696,7 +1684,7 @@ namespace Markdown.Xaml
             {
                 throw new ArgumentNullException(nameof(text));
             }
-            return Evaluate(text, _color, ColorEvaluator, defaultHandler);
+            return Evaluate(text, Color, ColorEvaluator, defaultHandler);
         }
 
         private Inline ColorEvaluator(Match match)
@@ -1706,7 +1694,7 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            string text = match.Groups[3].Value;
+            var text = match.Groups[3].Value;
             text = Regex.Replace(text, @"^[ ]*", ""); // leading whitespace
             text = Regex.Replace(text, @"[ ]*$", ""); // trailing whitespace
 
@@ -1732,14 +1720,14 @@ namespace Markdown.Xaml
         }
         #endregion Color
 
-        private static readonly Regex _outDent = new Regex(@"^[ ]{1," + _tabWidth + @"}", RegexOptions.Multiline | RegexOptions.Compiled);
+        private static readonly Regex OutDent = new Regex(@"^[ ]{1," + TabWidth + @"}", RegexOptions.Multiline | RegexOptions.Compiled);
 
         /// <summary>
         /// Remove one level of line-leading spaces
         /// </summary>
         private string Outdent(string block)
         {
-            return _outDent.Replace(block, "");
+            return OutDent.Replace(block, "");
         }
 
         /// <summary>
@@ -1757,9 +1745,9 @@ namespace Markdown.Xaml
 
             var output = new StringBuilder(text.Length);
             var line = new StringBuilder();
-            bool valid = false;
+            var valid = false;
 
-            for (int i = 0; i < text.Length; i++)
+            for (var i = 0; i < text.Length; i++)
             {
                 switch (text[i])
                 {
@@ -1781,8 +1769,8 @@ namespace Markdown.Xaml
                         }
                         break;
                     case '\t':
-                        int width = (_tabWidth - line.Length % _tabWidth);
-                        for (int k = 0; k < width; k++)
+                        var width = (TabWidth - line.Length % TabWidth);
+                        for (var k = 0; k < width; k++)
                             line.Append(' ');
                         break;
                     case '\x1A':
@@ -1839,12 +1827,12 @@ namespace Markdown.Xaml
             }
 
             var sb = new StringBuilder(value.Length * count);
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
                 sb.Append(value);
             return sb.ToString();
         }
 
-        private TResult Create<TResult, TContent>(IEnumerable<TContent> content)
+        private static TResult Create<TResult, TContent>(IEnumerable<TContent> content)
             where TResult : IAddChild, new()
         {
             var result = new TResult();
@@ -1856,7 +1844,7 @@ namespace Markdown.Xaml
             return result;
         }
 
-        private IEnumerable<T> Evaluate<T>(string text, Regex expression, Func<Match, T> build, Func<string, IEnumerable<T>> rest)
+        private static IEnumerable<T> Evaluate<T>(string text, Regex expression, Func<Match, T> build, Func<string, IEnumerable<T>> rest)
         {
             if (text is null)
             {
@@ -1891,8 +1879,8 @@ namespace Markdown.Xaml
             }
         }
 
-        private static readonly Regex _eoln = new Regex("\\s+");
-        private static readonly Regex _lbrk = new Regex(@"\ {2,}\n");
+        private static readonly Regex Eoln = new Regex("\\s+");
+        private static readonly Regex Lbrk = new Regex(@"\ {2,}\n");
 
         public static IEnumerable<Inline> DoText(string text)
         {
@@ -1901,15 +1889,15 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            var lines = _lbrk.Split(text);
-            bool first = true;
+            var lines = Lbrk.Split(text);
+            var first = true;
             foreach (var line in lines)
             {
                 if (first)
                     first = false;
                 else
                     yield return new LineBreak();
-                var t = _eoln.Replace(line, " ");
+                var t = Eoln.Replace(line, " ");
                 yield return new Run(t);
             }
         }

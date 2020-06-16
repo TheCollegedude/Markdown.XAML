@@ -18,8 +18,8 @@ namespace Markdown.Demo
         /// </summary>
         public bool IsLive
         {
-            get { return isLive; }
-            set { SetField(ref isLive, value); }
+            get => isLive;
+            set => SetField(ref isLive, value);
         }
         private bool isLive = true;
 
@@ -28,7 +28,7 @@ namespace Markdown.Demo
         /// </summary>
         public string TextMarkdown
         {
-            get { return textMarkdown; }
+            get => textMarkdown;
             set
             {
                 SetField(ref textMarkdown, value);
@@ -42,8 +42,8 @@ namespace Markdown.Demo
         /// </summary>
         public string TextPreview
         {
-            get { return textPreview; }
-            set { SetField(ref textPreview, value); }
+            get => textPreview;
+            set => SetField(ref textPreview, value);
         }
         private string textPreview = "";
 
