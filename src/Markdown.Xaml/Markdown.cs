@@ -790,6 +790,18 @@ namespace Markdown.Xaml
 
             var block = Create<Paragraph, Inline>(content);
 
+            var s = new StringBuilder();
+
+            for (var position = block.ContentStart; position?.CompareTo(block.ContentEnd) < 0; position = position.GetNextContextPosition(LogicalDirection.Forward))
+            {
+                var piece = position.GetTextInRun(LogicalDirection.Forward);
+                if (piece.Length == 0) continue;
+                if (s.Length > 0) s.Append(" ");
+                s.Append(piece);
+            }
+
+            block.Tag = s.ToString().Trim();
+
             switch (level)
             {
                 case 1:

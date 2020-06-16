@@ -15,16 +15,14 @@ MarkDown.Xaml has a number of convenient features
 If there are any bug fixes to the regular expressions in MarkdownSharp, merging those fixes in the Markdown.Xaml should be straightforward
 * Includes a `TextToFlowDocumentConverter` to make it easy to bind Markdown text
 
-# 
 ## Markdown capabilities and customizables styles: ##
 
-###### 
-#|:-:|***_BLOCK MARKDOWN_***
+#|:-:| ***_BLOCK MARKDOWN_***
  ===
 
 
 
-###***_Text Alignment_***
+### ***_Text Alignment_***
 You can define the text alignment for the document (at the beginning) or a single paragraph (before text).
 
 + use |:-| or |-| or nothing° for left alignment
@@ -32,11 +30,11 @@ You can define the text alignment for the document (at the beginning) or a singl
 + use |:-:| for center alignment
 + use |=| for justify alignment
 
-° "nothing" means left alignment only for the document; instead for the paragraphs "nothing" means the same alignment of the text defined for the document.
+"nothing" means left alignment only for the document; instead for the paragraphs "nothing" means the same alignment of the text defined for the document.
 
 
 
-###***_Headings_***
+### ***_Headings_***
 "Text" accepts any _span markdown_.
 Heading 1
 =
@@ -51,11 +49,11 @@ Heading 2
 ##### Heading 5
 ###### Heading 6
 ###### Heading 6 #######
-######Heading 6
+###### Heading 6
 
 
 
-###***_Separators_***
+### ***_Separators_***
  ---
  ===
  ***
@@ -63,7 +61,7 @@ Heading 2
 
 
 
-###***_Lists_***
+### ***_Lists_***
 "Text" accepts any _span markdown_.
 
 * First
@@ -88,7 +86,7 @@ Heading 2
 
 
 
-###***_Tables_***
+### ***_Tables_***
 "Text" accepts any _span markdown_.
 |A|b|C|d|E|f|
 |:-:|:-|-:|-|
@@ -106,7 +104,7 @@ Heading 2
 
 
 
-###***_Code Block_***
+### ***_Code Block_***
 "Text" accepts any _span markdown_.
 Text above
 «text code block text code block text code block text code block text code block text code block text code block text code block text code block.»
@@ -114,7 +112,7 @@ Text below
 
 
 
-###***_Note_***
+### ***_Note_***
 "Text" accepts any _span markdown_.
 Text above
 <text note text note text note text note text note text note text note text note text note text note text note text note text note text note.
@@ -123,7 +121,7 @@ Text below
 
 
 
-###***_BlockQuotes_***
+### ***_BlockQuotes_***
 "Text" accepts any _span markdown_.
 >Quote 1
 >>Quote 2a
@@ -132,16 +130,10 @@ Text below
 >>>>Quote 4 quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote quote
 >>>>>>>>> Up to 9
 
-
-
-
-###### 
  ___
-# 
-#|:-:|***_SPAN MARKDOWN_***
+
+# |:-:| ***_SPAN MARKDOWN_***
  ===
-
-
 
 ###***_Text Decorations_***
 + *Italic*
@@ -154,25 +146,25 @@ Text below
 
 
 
-###***_Color_***
+### ***_Color_***
 You can color text using color/[deepPink](color brush name), color/[#08F](hex) or color/[#88000000](hex with alpha).
 "Text" inside () accepts any _span markdown_.
 
 
 
-###***_Code Span_***
+### ***_Code Span_***
 You can `highlight` the text.
 
 
 
-###***_Links_***
+### ***_Links_***
 This is a [link](https://www.google.com).
 
 This is a [link with tooltip](https://www.google.com "Google").
 
 
 
-###***_Images_***
+### ***_Images_***
 _Remote images_: 
 
 ![image1](http://placehold.it/350x150)
