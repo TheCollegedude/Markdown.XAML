@@ -306,12 +306,12 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return DoHeaders(text,
-                s1 => DoNote(s1,
-                s2 => DoHorizontalRules(s2,
-                s3 => DoLists(s3,
-                s4 => DoTable(s4,
-                s5 => DoCodeBlock(s5,
+            return DoCodeBlock(text,
+                s1 => DoHeaders(s1,
+                s2 => DoNote(s2,
+                s3 => DoHorizontalRules(s3,
+                s4 => DoLists(s4,
+                s5 => DoTable(s5,
                 s6 => DoBlockQuotes(s6,
                 sn => FormParagraphs(sn))))))));
 
@@ -359,6 +359,16 @@ namespace Markdown.Xaml
             //text = DoHardBreaks(text);
 
             //return text;
+        }
+
+        private IEnumerable<Inline> RunSpan(string text)
+        {
+            foreach (var line in text.Split('\r', '\n'))
+            {
+                var t = _eoln.Replace(line, " ");
+                yield return new Run(t);
+                yield return new LineBreak();
+            }
         }
 
         private static readonly Regex _newlinesLeadingTrailing = new Regex(@"^\n+|\n+\z", RegexOptions.Compiled);
@@ -1483,11 +1493,11 @@ namespace Markdown.Xaml
         #region CodeBlock
         private static readonly Regex _codeBlock = new Regex(@"
                 \n
-                (```)     # $1 = starting marker ```
-                (.+?)?     # $2 = language (for syntax highlighting)
-                \n
-                (.+?)     # $3 = Code text
-                ```       # closing marker ```
+                \s*```               # starting marker ```
+                (?<lang>\w+?)?     # language (for syntax highlighting)
+                \s*\n
+                (?<code>.+?)      # code text
+                \s*```\s*               # closing marker ```
                 \n+
             ", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
@@ -1510,11 +1520,10 @@ namespace Markdown.Xaml
             {
                 throw new ArgumentNullException(nameof(match));
             }
-            
-            var textAlignment = GetTextAlignment(match.Groups[3].Value);
-            var block = Create<Paragraph, Inline>(RunSpanGamut(Regex.Replace(match.Groups[3].Value, _alignment, "")));
+
+            var block = Create<Paragraph, Inline>(RunSpan(match.Groups["code"].Value));
             block.Style = CodeBlockStyle;
-            block.TextAlignment = textAlignment;
+            block.TextAlignment = TextAlignment.Left;
             return block;
         }
         #endregion CodeBlock
@@ -1574,7 +1583,6 @@ namespace Markdown.Xaml
             string span = match.Groups[2].Value;
             span = Regex.Replace(span, @"^[ ]*", ""); // leading whitespace
             span = Regex.Replace(span, @"[ ]*$", ""); // trailing whitespace
-            span = " " + span + " ";
 
             return new Run(span) 
             {
