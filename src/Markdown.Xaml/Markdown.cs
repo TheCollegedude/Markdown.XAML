@@ -274,6 +274,7 @@ namespace Markdown.Xaml
 
             text = Normalize(text);
 
+            defaultTextAlignment = TextAlignment.Left;
             defaultTextAlignment = GetTextAlignment(text);
 
             text = Regex.Replace(text, Alignment, "");
