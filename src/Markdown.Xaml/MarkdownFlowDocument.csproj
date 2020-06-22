@@ -2,6 +2,18 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <PackageId>MarkdownFlowDocument</PackageId>
+    <PackageVersion>$(PackageVersion)</PackageVersion>
+    <Authors>Authors</Authors>
+    <PackageDescription>Converts strings that are formatted with Markdown syntax to WPF FlowDocument</PackageDescription>
+    <Copyright>Copyright (c) 2010 Bevan Arps</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>None</PackageReleaseNotes>
+    <PackageTags>mardown xaml flowdocument</PackageTags>
+    <RepositoryUrl>https://github.com/TheCollegedude/Markdown.XAML</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{34186C3B-C308-4CAE-B462-DB7B5F5E378C}</ProjectGuid>
