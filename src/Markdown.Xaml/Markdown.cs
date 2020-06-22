@@ -189,15 +189,15 @@ namespace Markdown.Xaml
         public static readonly DependencyProperty ImageFailedStyleProperty =
             DependencyProperty.Register(nameof(ImageFailedStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
-        //public Style ImageDownloadFailedStyle
-        //{
-        //    get { return (Style)GetValue(ImageDownloadFailedStyleProperty); }
-        //    set { SetValue(ImageDownloadFailedStyleProperty, value); }
-        //}
+        public Style ImageDownloadFailedStyle
+        {
+            get => (Style)GetValue(ImageDownloadFailedStyleProperty);
+            set => SetValue(ImageDownloadFailedStyleProperty, value);
+        }
 
-        //// Using a DependencyProperty as the backing store for ImageDownloadFailedStyle.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty ImageDownloadFailedStyleProperty =
-        //    DependencyProperty.Register(nameof(ImageDownloadFailedStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
+        // Using a DependencyProperty as the backing store for ImageDownloadFailedStyle.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ImageDownloadFailedStyleProperty =
+            DependencyProperty.Register(nameof(ImageDownloadFailedStyle), typeof(Style), typeof(Markdown), new PropertyMetadata(null));
 
         public Style SeparatorStyle
         {
@@ -408,7 +408,7 @@ namespace Markdown.Xaml
         {
             // in other words [this] and [this[also]] and [this[also[too]]]
             // up to _nestDepth
-            return _nestedBracketsPattern ?? (_nestedBracketsPattern = RepeatString(@"
+            return _nestedBracketsPattern ??= RepeatString(@"
                     (?>              # Atomic matching
                        [^\[\]]+      # Anything other than brackets
                      |
@@ -416,7 +416,7 @@ namespace Markdown.Xaml
                            ", NestDepth) + RepeatString(
                 @" \]
                     )*"
-                , NestDepth));
+                , NestDepth);
         }
 
         private static string _nestedParensPattern;
@@ -429,7 +429,7 @@ namespace Markdown.Xaml
         {
             // in other words (this) and (this(also)) and (this(also(too)))
             // up to _nestDepth
-            return _nestedParensPattern ?? (_nestedParensPattern = RepeatString(@"
+            return _nestedParensPattern ??= RepeatString(@"
                     (?>              # Atomic matching
                        [^()\s]+      # Anything other than parens or whitespace
                      |
@@ -437,7 +437,7 @@ namespace Markdown.Xaml
                            ", NestDepth) + RepeatString(
                 @" \)
                     )*"
-                , NestDepth));
+                , NestDepth);
         }
 
         private static string _nestedParensPatternWithWhiteSpace;
@@ -450,7 +450,7 @@ namespace Markdown.Xaml
         {
             // in other words (this) and (this(also)) and (this(also(too)))
             // up to _nestDepth
-            return _nestedParensPatternWithWhiteSpace ?? (_nestedParensPatternWithWhiteSpace = RepeatString(@"
+            return _nestedParensPatternWithWhiteSpace ??= RepeatString(@"
                     (?>              # Atomic matching
                        [^()]+        # Anything other than parens
                      |
@@ -458,7 +458,7 @@ namespace Markdown.Xaml
                            ", NestDepth) + RepeatString(
                 @" \)
                     )*"
-                , NestDepth));
+                , NestDepth);
         }
 
         #region Image
@@ -521,16 +521,20 @@ namespace Markdown.Xaml
             }
             catch (Exception)
             {
-                //return new Run("!" + (!string.IsNullOrEmpty(imageAlt) ? imageAlt : url)) { Style = ImageDownloadFailedStyle };                
-
-                imgSource = CreateBitmapImage();
-                var img = new Image()
+                var img = new Image
                 {
-                    Source = imgSource,
-                    Width = imgSource.Width,
                     ToolTip = ToolTipForImageFailed(imageAlt, url),
                     Style = ImageFailedStyle
                 };
+
+                // in case ImageFailedStyle provides a Source (e.g. DrawingImage)
+                if (img.Source != null) return new InlineUIContainer(img);
+
+                img.Source = CreateBitmapImage(); // load "broken image" icon from resources
+
+                if (img.Source == null) // when even getting a placeholder from resources fails...
+                    return new Run("!" + (!string.IsNullOrEmpty(imageAlt) ? imageAlt : url)) { Style = ImageDownloadFailedStyle };
+
                 return new InlineUIContainer(img);
             }
 
@@ -593,7 +597,9 @@ namespace Markdown.Xaml
         {
             if (string.IsNullOrEmpty(url))
             {
-                using (var stream = new MemoryStream()) {
+                try
+                {
+                    using var stream = new MemoryStream(); 
                     Properties.Resources.ImageFailed.Save(stream, ImageFormat.Bmp);
 
                     stream.Position = 0;
@@ -606,6 +612,10 @@ namespace Markdown.Xaml
                     result.EndInit();
                     result.Freeze();
                     return result;
+                }
+                catch (Exception)
+                {
+                    return null;
                 }
             }
 

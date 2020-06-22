@@ -24,6 +24,7 @@
                         LinkStyle="{StaticResource LinkStyle}"
                         ImageStyle="{StaticResource ImageStyle}"
                         ImageFailedStyle="{StaticResource ImageFailedStyle}"
+                        ImageDownloadFailedStyle="{StaticResource ImageDownloadFailedStyle}"
                         NormalParagraphStyle="{StaticResource NormalParagraphStyle}"
                         NoteStyle="{StaticResource NoteStyle}"
                         SeparatorStyle="{StaticResource SeparatorStyle}"
