@@ -305,13 +305,13 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(text));
             }
 
-            return DoCodeBlock(text,
-                s1 => DoHeaders(s1,
-                s2 => DoNote(s2,
-                s3 => DoHorizontalRules(s3,
-                s4 => DoLists(s4,
-                s5 => DoTable(s5,
-                s6 => DoBlockQuotes(s6,
+            return DoHeaders(text,
+                n => DoNote(n,
+                hr => DoHorizontalRules(hr,
+                l => DoLists(l,
+                t => DoTable(t,
+                q => DoBlockQuotes(q, 
+                c => DoCodeBlock(c,
                 FormParagraphs)))))));
 
             //// We already ran HashHTMLBlocks() before, in Markdown(), but that
@@ -358,16 +358,6 @@ namespace Markdown.Xaml
             //text = DoHardBreaks(text);
 
             //return text;
-        }
-
-        private static IEnumerable<Inline> RunSpan(string text)
-        {
-            foreach (var line in text.Split('\r', '\n'))
-            {
-                var t = Eoln.Replace(line, " ");
-                yield return new Run(t);
-                yield return new LineBreak();
-            }
         }
 
         private static readonly Regex NewlinesLeadingTrailing = new Regex(@"^\n+|\n+\z", RegexOptions.Compiled);
@@ -1206,7 +1196,7 @@ namespace Markdown.Xaml
 
             // Turn double returns into triple returns, so that we can make a
             // paragraph for the last item in a list, if necessary:
-            list = Regex.Replace(list, @"\n{2,}", "\n\n\n");
+            //list = Regex.Replace(list, @"\n{2,}", "\n\n\n");
 
             var resultList = Create<List, ListItem>(ProcessListItems(list, listType == "ul" ? MarkerUl : MarkerOl));
 
@@ -1532,10 +1522,26 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            var block = Create<Paragraph, Inline>(RunSpan(match.Groups["code"].Value));
-            block.Style = CodeBlockStyle;
-            block.TextAlignment = TextAlignment.Left;
-            return block;
+            var text = match.Groups["code"].Value;
+
+            var stack = new StackPanel();
+
+            foreach (var line in text.Split('\r', '\n'))
+            {
+                var t = Eoln.Replace(line, " ");
+                stack.Children.Add(new TextBlock { Style = CodeBlockStyle, Text = t, TextWrapping = TextWrapping.NoWrap});
+            }
+
+            var scroller = new ScrollViewer 
+            {
+                Content = stack, 
+                HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto, 
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto
+            };
+
+            var container = new BlockUIContainer {Child = scroller};
+            return container;
         }
         #endregion CodeBlock
 
