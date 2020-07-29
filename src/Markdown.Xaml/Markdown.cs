@@ -9,7 +9,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -454,19 +453,24 @@ namespace Markdown.Xaml
         #region Image
         private static readonly Regex ImageInline = new Regex(
             string.Format(CultureInfo.InvariantCulture, @"
-                (                           # wrap whole match in $1
+                (?:
                     !\[
-                        ({0})               # link text = $2
+                        (?<alt>{0})         # link text
                     \]
-                    \(                      # literal paren
+                    \(
                         [ ]*
-                        ({1})               # href = $3
+                        (?<url>{1})         # image URI
                         [ ]*
-                        (                   # $4
-                        (['""])             # quote char = $5
-                        (.*?)               # tag = $6
-                        \5                  # matching quote
-                        [ ]*                # ignore any spaces between closing quote and )
+                        (?:
+                            [ ]*
+                            (?<scaling>\d*[.]?\d+)%
+                            [ ]*
+                        )?                  # size is optional
+                        (?:
+                            (?<quote>['""]) # quote char
+                                (?<tag>.*?) # tag
+                            \k<quote>       # matching quote
+                            [ ]*            # ignore any spaces between closing quote and )
                         )?                  # tag is optional
                     \)
                 )", GetNestedBracketsPattern(), GetNestedParensPattern()),
@@ -495,9 +499,12 @@ namespace Markdown.Xaml
                 throw new ArgumentNullException(nameof(match));
             }
 
-            var imageAlt = match.Groups[2].Value;
-            var url = match.Groups[3].Value;
-            var tag = match.Groups[6].Value;
+            var imageAlt = match.Groups["alt"].Value;
+            var url = match.Groups["url"].Value;
+            var tag = match.Groups["tag"].Value;
+
+            if (!double.TryParse(match.Groups["scaling"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var scaling))
+                scaling = 100.0;
 
             BitmapImage imgSource;
             try
@@ -545,24 +552,26 @@ namespace Markdown.Xaml
             // Bind size so document is updated when image is downloaded
             if (imgSource.IsDownloading)
             {
-                var binding = new Binding(nameof(BitmapImage.Width)) {Source = imgSource, Mode = BindingMode.OneWay};
-
-                var bindingExpression = BindingOperations.SetBinding(image, FrameworkElement.WidthProperty, binding);
+                //var binding = new Binding(nameof(BitmapImage.Width)) {Source = imgSource, Mode = BindingMode.OneWay};
+                //var bindingExpression = BindingOperations.SetBinding(image, FrameworkElement.WidthProperty, binding);
                 
                 void DownloadCompletedHandler(object sender, EventArgs e)
                 {
-                    imgSource.DownloadCompleted -= DownloadCompletedHandler;
-                    imgSource.DownloadFailed -= DownloadFailedHandler;
-                    bindingExpression.UpdateTarget();
+                    var source = (BitmapImage) sender;
+                    source.DownloadCompleted -= DownloadCompletedHandler;
+                    source.DownloadFailed -= DownloadFailedHandler;
+                    image.Width = source.Width * scaling/100.0;
+                    //bindingExpression.UpdateTarget();
                 }
 
                 void DownloadFailedHandler(object sender, EventArgs e)
                 {
-                    imgSource.DownloadCompleted -= DownloadCompletedHandler;
-                    imgSource.DownloadFailed -= DownloadFailedHandler;
+                    var source = (BitmapImage) sender;
+                    source.DownloadCompleted -= DownloadCompletedHandler;
+                    source.DownloadFailed -= DownloadFailedHandler;
+
                     // default image when download failed
-                    imgSource = CreateBitmapImage();
-                    image.Source = imgSource;
+                    image.Source = CreateBitmapImage();;
                     image.Width = imgSource.Width;
                     image.ToolTip = ToolTipForImageFailed(imageAlt, url);
                     image.Style = ImageFailedStyle;
@@ -573,7 +582,8 @@ namespace Markdown.Xaml
             }
             else
             {
-                image.Width = imgSource.Width;
+                // local resource
+                image.Width = imgSource.Width * scaling/100.0;
             }
 
             return new InlineUIContainer(image);

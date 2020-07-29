@@ -175,7 +175,7 @@ The image **#4** has the "right" tag which is used to set a different style for 
 
 _Local image_: 
 
-![image2](sampleimage.jpg)
+![image2](sampleimage.jpg 200%)
 
 _Fail to load image_: 
 
