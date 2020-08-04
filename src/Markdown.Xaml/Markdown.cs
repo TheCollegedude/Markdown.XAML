@@ -622,9 +622,9 @@ namespace Markdown.Xaml
             var imgSource = new BitmapImage();
             imgSource.BeginInit();
             imgSource.CacheOption = BitmapCacheOption.None;
-            imgSource.UriCachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
+            imgSource.UriCachePolicy = new RequestCachePolicy(RequestCacheLevel.Default);
             imgSource.CacheOption = BitmapCacheOption.OnLoad;
-            imgSource.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            imgSource.CreateOptions = BitmapCreateOptions.None;
             imgSource.UriSource = new Uri(url);
             imgSource.EndInit();     // System.IO.FileNotFoundException:
             return imgSource;
@@ -912,25 +912,23 @@ namespace Markdown.Xaml
                     Padding = new Thickness(10, 0, 0, 0)
                 };
             }
-            else
-            {
-                var commentFDoc = new FlowDocument(Create<Paragraph, Inline>(content));
-                //{
-                //    Style = DocumentStyle,
-                //    TextAlignment = defaultTextAlignment
-                //};
 
-                return new Border()
+            var commentFDoc = new FlowDocument(Create<Paragraph, Inline>(content));
+            //{
+            //    Style = DocumentStyle,
+            //    TextAlignment = defaultTextAlignment
+            //};
+
+            return new Border
+            {
+                BorderBrush = Brushes.Silver,
+                BorderThickness = new Thickness(2, 0, 0, 0),
+                Child = new RichTextBox(commentFDoc)
                 {
-                    BorderBrush = Brushes.Silver,
-                    BorderThickness = new Thickness(2, 0, 0, 0),
-                    Child = new RichTextBox(commentFDoc)
-                    {
-                        Style = BlockQuoteStyle
-                    },
-                    Padding = new Thickness(10, 0, 0, 0)
-                };
-            }
+                    Style = BlockQuoteStyle
+                },
+                Padding = new Thickness(10, 0, 0, 0)
+            };
         }
         #endregion BlockQuotes
 

@@ -177,9 +177,13 @@ _Local image with 200% scaling_:
 
 ![image2](sampleimage.jpg 200%)
 
-_Local image as link:_
+_Local downscaled image as link:_
 
-[![Alt text](sampleimage.jpg)](http://example.net/)
+[![Alt text](sampleimage.jpg 50%)](http://example.net/)
+
+_Remote downscaled image as link:_
+
+[![Tasty Image](https://picsum.photos/id/1080/367/267 25%)](Fragola)
 
 _Fail to load image_: 
 
