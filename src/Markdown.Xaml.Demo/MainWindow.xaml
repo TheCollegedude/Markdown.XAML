@@ -89,7 +89,7 @@
                                   VerticalScrollBarVisibility="Auto"/>
                 </Grid>
             </TabItem>
-            
+
             <TabItem Header="DEMO">
                 <Grid>
                     <Grid.ColumnDefinitions>

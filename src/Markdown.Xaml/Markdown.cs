@@ -336,8 +336,8 @@ namespace Markdown.Xaml
 
             return DoColor(text,
                 s1 => DoCodeSpan(s1,
-                s2 => DoImages(s2,
                 s3 => DoAnchors(s3,
+                s2 => DoImages(s2,
                 s4 => DoTextDecorations(s4,
                 DoText)))));
 
@@ -655,16 +655,19 @@ namespace Markdown.Xaml
         public ICommand HyperlinkCommand { get; set; }
 
         private static readonly Regex AnchorInline = new Regex(
-            string.Format(CultureInfo.InvariantCulture, @"
-                (                           # wrap whole match
+             @$"
+                (?:^|[^!])                                                 # no preceeding ! to separate from image
+                (?:                                                        # wrap whole match
                     \[
-                        (?<text>{0})            # link text
+                        (?<text>[^!]{GetNestedBracketsPattern()})          # link text 
+                        |
+                        (?<text>!\[[^\]]*\]\([^\)]*\))                     # link image
                     \]
                     (?:
-                        \(                      # literal paren
+                        \(                                                 # literal paren
                             (?:
                                 [ ]*
-                                (?<href>{1})        # href
+                                (?<href>{GetNestedParensPattern()})        # href
                             )?                      # href is optional
                             [ ]*
                             (?:
@@ -675,8 +678,7 @@ namespace Markdown.Xaml
                             )?                      # title is optional
                         \)
                     )?
-                )", GetNestedBracketsPattern(), GetNestedParensPattern()),
-                  RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+                )", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
         /// <summary>
         /// Turn Markdown link shortcuts into hyperlinks
@@ -1877,7 +1879,14 @@ namespace Markdown.Xaml
             var result = new TResult();
             foreach (var c in content)
             {
-                result.AddChild(c);
+                try
+                {
+                    result.AddChild(c);
+                }
+                catch (InvalidOperationException)
+                {
+                    result.AddText(c.ToString());
+                }
             }
 
             return result;

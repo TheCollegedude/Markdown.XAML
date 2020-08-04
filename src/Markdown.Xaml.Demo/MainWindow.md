@@ -173,9 +173,13 @@ _Remote images_:
 
 The image **#4** has the "right" tag which is used to set a different style for the image; in this case the style has Margin="20,0,0,0".
 
-_Local image_: 
+_Local image with 200% scaling_: 
 
 ![image2](sampleimage.jpg 200%)
+
+_Local image as link:_
+
+[![Alt text](sampleimage.jpg)](http://example.net/)
 
 _Fail to load image_: 
 
