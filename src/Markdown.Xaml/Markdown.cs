@@ -336,8 +336,8 @@ namespace Markdown.Xaml
 
             return DoColor(text,
                 s1 => DoCodeSpan(s1,
-                s3 => DoAnchors(s3,
-                s2 => DoImages(s2,
+                s2 => DoAnchors(s2,
+                s3 => DoImages(s3,
                 s4 => DoTextDecorations(s4,
                 DoText)))));
 
@@ -656,12 +656,10 @@ namespace Markdown.Xaml
 
         private static readonly Regex AnchorInline = new Regex(
              @$"
-                (?:^|[^!])                                                 # no preceeding ! to separate from image
+                (?:^|(?<![!]))                                             # no preceeding ! to separate from image
                 (?:                                                        # wrap whole match
                     \[
-                        (?<text>[^!]{GetNestedBracketsPattern()})          # link text 
-                        |
-                        (?<text>!\[[^\]]*\]\([^\)]*\))                     # link image
+                        (?<text>{GetNestedBracketsPattern()})              # link text 
                     \]
                     (?:
                         \(                                                 # literal paren
@@ -710,7 +708,15 @@ namespace Markdown.Xaml
 
             var result = Create<Hyperlink, Inline>(RunSpanGamut(linkText));
             result.Command = HyperlinkCommand;
-            result.CommandParameter = string.IsNullOrEmpty(url) ? linkText : url;
+            result.CommandParameter = url;
+
+            // hyperlink without url: use the link's text as target
+            // (exception: hyperlink has image instead of text, then target still remains empty)
+            if (string.IsNullOrEmpty(url))
+            {
+                result.CommandParameter = ImageInline.IsMatch(linkText) ? string.Empty : linkText;
+            }
+
             if (!string.IsNullOrWhiteSpace(title))
             {
                 result.ToolTip = title;
